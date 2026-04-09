@@ -9,10 +9,10 @@ A lightweight **EDI / PO tracking system built using Google Apps Script and Goog
 
 The tool replaces manual spreadsheets used to track:
 
-- EDI issues
-- Pending PO confirmations
-- Inbound DC problems
-- Vendor follow-ups
+- EDI issues  
+- Pending PO confirmations  
+- Inbound DC problems  
+- Vendor follow-ups  
 
 Operators log issues through a **web form**, and close them once resolved.
 
@@ -40,15 +40,15 @@ All records are stored in **Google Sheets**.
 
 Operators can log:
 
-- Plant
-- Vendor
-- Type (Without EDI / Inward DC)
-- Vendor Invoice Number
-- DC Number
-- Part Number
-- Quantity
-- Dock
-- Remarks
+- Plant  
+- Vendor  
+- Type (Without EDI / Inward DC)  
+- Vendor Invoice Number  
+- DC Number  
+- Part Number  
+- Quantity  
+- Dock  
+- Remarks  
 
 All entries are stored in the **MAIN_LOG** sheet.
 
@@ -90,16 +90,133 @@ The system tracks how long each issue remains open.
 
 This helps identify:
 
-- vendor delays
-- customer EDI delays
-- operational bottlenecks
+- Vendor delays
+- Customer EDI delays
+- Operational bottlenecks
 
 ---
 
 ## Concurrency Safe
 
-The application uses **Google Apps Script LockService** to prevent data conflicts when multiple users submit records simultaneously.
+The application uses **Google Apps Script LockService** to prevent conflicts when multiple users submit records simultaneously.
 
 ---
 
 # System Architecture
+
+Warehouse Operators  
+│  
+└── Web Form (Apps Script UI)  
+  │  
+  ▼  
+Google Apps Script Backend  
+│  
+└── Business Logic  
+  │  
+  ▼  
+Google Sheets Database  
+
+Sheets Used:
+- MAIN_LOG
+- MASTER_VENDOR
+- MASTER_PART
+- OPEN_POINTS
+
+---
+
+# Project Structure
+
+Repository Structure:
+
+edi-po-tracker-appscript  
+│  
+├── code.gs  
+├── index.html  
+└── README.md  
+
+---
+
+# Database Schema
+
+## MAIN_LOG
+
+| Column | Field |
+|------|------|
+| A | SR No |
+| B | Receipt Date |
+| C | Plant |
+| D | Type |
+| E | Vendor |
+| F | Vendor Invoice No |
+| G | DC No |
+| H | EDI No |
+| I | Customer Invoice No |
+| J | Part No |
+| K | Qty |
+| L | Dock |
+| M | Status |
+| N | Closed On |
+| O | Remark |
+| P | Time Taken |
+
+---
+
+# Open Points Formula
+
+`=IFERROR(FILTER(MAIN_LOG!A2:P, MAIN_LOG!M2:M="Pending"), "")`
+
+---
+
+# Tech Stack
+
+- Google Apps Script
+- Google Sheets
+- HTML
+- CSS
+- JavaScript
+
+---
+
+# Deployment
+
+1. Open the Apps Script project  
+2. Deploy as **Web App**  
+3. Grant permissions  
+4. Share the link with operators  
+
+---
+
+# Use Case
+
+Designed for:
+
+- Warehouse operations
+- Supply chain teams
+- Inbound logistics
+- Vendor coordination workflows
+
+---
+
+# Future Improvements
+
+Possible enhancements:
+
+- Email alerts for pending records
+- Vendor aging reports
+- Dashboard analytics
+- Escalation alerts
+- Mobile optimization
+
+---
+
+# License
+
+MIT License
+
+---
+
+# Author
+
+By Yash Aparajit
+
+--
