@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family:Inter,Arial;
+background:#f4f6f8;
+margin:0;
+}
+
+.header{
+background:#015eab;
+color:white;
+padding:20px;
+font-size:22px;
+font-weight:bold;
+}
+
+.tabs{
+display:flex;
+}
+
+.tab{
+flex:1;
+padding:15px;
+text-align:center;
+cursor:pointer;
+background:#e6eef7;
+}
+
+.tab.active{
+background:#00713d;
+color:white;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:14px;
+box-shadow:0 4px 20px rgba(0,0,0,0.08);
+}
+
+label{
+font-weight:bold;
+margin-top:15px;
+display:block;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:6px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+background:#015eab;
+color:white;
+border:none;
+padding:14px;
+border-radius:10px;
+margin-top:20px;
+width:100%;
+font-size:16px;
+}
+
+button:hover{
+background:#00713d;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+DC Tracking System
+
+</div>
+
+<div class="tabs">
+
+<div class="tab active" onclick="showTab('entry')">
+
+Log DC
+
+</div>
+
+<div class="tab" onclick="showTab('close')">
+
+Close DC
+
+</div>
+
+</div>
+
+<div class="container">
+
+<div id="entry" class="card">
+
+<label>Plant</label>
+
+<select id="plant">
+
+<option>Pune</option>
+<option>Chakan</option>
+<option>Sanand</option>
+
+</select>
+
+<label>Vendor</label>
+
+<input list="vendors" id="vendor">
+
+<datalist id="vendors"></datalist>
+
+<label>DC No</label>
+
+<input type="number" id="dc">
+
+<label>Part No</label>
+
+<input list="parts" id="part" oninput="fetchDesc()">
+
+<datalist id="parts"></datalist>
+
+<label>Description</label>
+
+<input id="desc" readonly>
+
+<label>Qty</label>
+
+<input type="number" id="qty">
+
+<label>Dock</label>
+
+<select id="dock">
+
+<option>1</option>
+<option>2</option>
+<option>3</option>
+
+</select>
+
+<button onclick="save()">Save Entry</button>
+
+</div>
+
+<div id="close" class="card" style="display:none">
+
+<label>DC No</label>
+
+<input list="openDC" id="closeDC">
+
+<datalist id="openDC"></datalist>
+
+<label>EDI No</label>
+
+<input id="edi">
+
+<button onclick="closeEntry()">Close DC</button>
+
+</div>
+
+</div>
+
+<script>
+
+function showTab(tab){
+
+document.getElementById("entry").style.display=
+tab=="entry"?"block":"none";
+
+document.getElementById("close").style.display=
+tab=="close"?"block":"none";
+
+}
+
+/* LOAD DATA */
+
+window.onload=function(){
+
+google.script.run.withSuccessHandler(function(v){
+
+const list=document.getElementById("vendors");
+
+v.forEach(function(i){
+
+let o=document.createElement("option");
+o.value=i;
+list.appendChild(o);
+
+});
+
+}).getVendors();
+
+
+google.script.run.withSuccessHandler(function(p){
+
+const list=document.getElementById("parts");
+
+p.forEach(function(i){
+
+let o=document.createElement("option");
+o.value=i[0];
+list.appendChild(o);
+
+});
+
+}).getParts();
+
+
+google.script.run.withSuccessHandler(function(d){
+
+const list=document.getElementById("openDC");
+
+d.forEach(function(i){
+
+let o=document.createElement("option");
+o.value=i;
+list.appendChild(o);
+
+});
+
+}).getOpenDC();
+
+}
+
+/* FETCH PART DESC */
+
+function fetchDesc(){
+
+const part=document.getElementById("part").value;
+
+google.script.run.withSuccessHandler(function(d){
+
+document.getElementById("desc").value=d;
+
+}).getPartDesc(part);
+
+}
+
+/* SAVE */
+
+function save(){
+
+const data={
+
+plant:document.getElementById("plant").value,
+vendor:document.getElementById("vendor").value,
+dc:document.getElementById("dc").value,
+part:document.getElementById("part").value,
+desc:document.getElementById("desc").value,
+qty:document.getElementById("qty").value,
+dock:document.getElementById("dock").value
+
+};
+
+google.script.run.withSuccessHandler(function(){
+
+alert("Saved");
+
+location.reload();
+
+}).saveEntry(data);
+
+}
+
+/* CLOSE */
+
+function closeEntry(){
+
+const data={
+
+dc:document.getElementById("closeDC").value,
+edi:document.getElementById("edi").value
+
+};
+
+google.script.run.withSuccessHandler(function(){
+
+alert("Closed");
+
+location.reload();
+
+}).closeDC(data);
+
+}
+
+</script>
+
+</body>
+</html>
