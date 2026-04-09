@@ -140,10 +140,10 @@ Close DC
 <datalist id="vendorList"></datalist>
 
 <label>DC No</label>
-<input type="number" id="dc">
+<input type="number" id="dc" inputmode="numeric" pattern="[0-9]*">
 
 <label>Part No</label>
-<input list="partList" id="part">
+<input list="partList" id="part" inputmode="numeric" pattern="[0-9]*">
 <datalist id="partList"></datalist>
 
 <label>Qty</label>
@@ -169,7 +169,7 @@ Close DC
 <datalist id="openDC"></datalist>
 
 <label>EDI No</label>
-<input id="edi">
+<input id="edi" type="number" inputmode="numeric" pattern="[0-9]*">
 
 <button id="closeBtn" onclick="closeEntry()">Close</button>
 
