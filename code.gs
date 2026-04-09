@@ -1,17 +1,20 @@
-const MAIN_SHEET = "MAIN_LOG";
-const VENDOR_SHEET = "MASTER_VENDOR";
-const PART_SHEET = "MASTER_PART";
+const MAIN = "MAIN_LOG";
+const VENDOR = "MASTER_VENDOR";
+const PART = "MASTER_PART";
+
+/* WEB APP */
 
 function doGet() {
-  return HtmlService.createHtmlOutputFromFile("index")
-  .setTitle("DC Tracking System");
+  return HtmlService
+    .createHtmlOutputFromFile("index")
+    .setTitle("EDI / PO Tracking");
 }
 
 /* FETCH VENDORS */
+
 function getVendors(){
 
-const sh = SpreadsheetApp.getActive().getSheetByName(VENDOR_SHEET);
-if(!sh) return [];
+const sh = SpreadsheetApp.getActive().getSheetByName(VENDOR);
 
 return sh.getRange(2,1,sh.getLastRow()-1,1)
 .getValues()
@@ -24,46 +27,25 @@ return sh.getRange(2,1,sh.getLastRow()-1,1)
 
 function getParts(){
 
-const sh = SpreadsheetApp.getActive().getSheetByName(PART_SHEET);
+const sh = SpreadsheetApp.getActive().getSheetByName(PART);
 
-const data = sh.getRange(2,1,sh.getLastRow()-1,2).getValues();
-
-return data;
-
-}
-
-/* GET PART DESC */
-
-function getPartDesc(part){
-
-const sh = SpreadsheetApp.getActive().getSheetByName(PART_SHEET);
-
-const data = sh.getDataRange().getValues();
-
-for(let i=1;i<data.length;i++){
-
-if(data[i][0]==part){
-
-return data[i][1];
-
-}
-
-}
-
-return "";
+return sh.getRange(2,1,sh.getLastRow()-1,1)
+.getValues()
+.flat()
+.filter(String);
 
 }
 
 /* SAVE ENTRY */
 
-function saveEntry(form){
+function saveEntry(data){
 
 const lock = LockService.getScriptLock();
 lock.waitLock(20000);
 
 try{
 
-const sh = SpreadsheetApp.getActive().getSheetByName(MAIN_SHEET);
+const sh = SpreadsheetApp.getActive().getSheetByName(MAIN);
 
 const sr = sh.getLastRow();
 
@@ -76,19 +58,24 @@ Session.getScriptTimeZone(),
 sh.appendRow([
 sr,
 today,
-form.plant,
-form.vendor,
-form.dc,
+data.plant,
+data.vendor,
+data.dc,
 "",
-form.part,
-form.desc,
-form.qty,
-form.dock,
+data.part,
+data.qty,
+data.dock,
 "Pending",
 ""
 ]);
 
-return true;
+return {status:true};
+
+}
+
+catch(err){
+
+return {status:false,msg:err.message};
 
 }
 
@@ -100,11 +87,11 @@ lock.releaseLock();
 
 }
 
-/* FETCH OPEN DC */
+/* GET OPEN DC */
 
 function getOpenDC(){
 
-const sh = SpreadsheetApp.getActive().getSheetByName(MAIN_SHEET);
+const sh = SpreadsheetApp.getActive().getSheetByName(MAIN);
 
 const data = sh.getDataRange().getValues();
 
@@ -112,7 +99,7 @@ let arr=[];
 
 for(let i=1;i<data.length;i++){
 
-if(data[i][10]=="Pending"){
+if(data[i][9]=="Pending"){
 
 arr.push(data[i][4]);
 
@@ -126,26 +113,26 @@ return arr;
 
 /* CLOSE DC */
 
-function closeDC(form){
+function closeDC(data){
 
 const lock = LockService.getScriptLock();
 lock.waitLock(20000);
 
 try{
 
-const sh = SpreadsheetApp.getActive().getSheetByName(MAIN_SHEET);
+const sh = SpreadsheetApp.getActive().getSheetByName(MAIN);
 
-const data = sh.getDataRange().getValues();
+const rows = sh.getDataRange().getValues();
 
-for(let i=1;i<data.length;i++){
+for(let i=1;i<rows.length;i++){
 
-if(data[i][4]==form.dc){
+if(rows[i][4]==data.dc){
 
-sh.getRange(i+1,6).setValue(form.edi);
+sh.getRange(i+1,6).setValue(data.edi);
 
-sh.getRange(i+1,11).setValue("Completed");
+sh.getRange(i+1,10).setValue("Completed");
 
-sh.getRange(i+1,12).setValue(
+sh.getRange(i+1,11).setValue(
 Utilities.formatDate(new Date(),
 Session.getScriptTimeZone(),
 "dd/MM/yyyy")
@@ -157,7 +144,13 @@ break;
 
 }
 
-return true;
+return {status:true};
+
+}
+
+catch(err){
+
+return {status:false,msg:err.message};
 
 }
 
@@ -168,3 +161,4 @@ lock.releaseLock();
 }
 
 }
+
