@@ -5,34 +5,39 @@
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-success)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
-A lightweight **EDI / PO tracking system built with Google Apps Script and Google Sheets** to streamline warehouse operations.
+A lightweight **EDI / PO tracking system built using Google Apps Script and Google Sheets** to streamline warehouse operations.
 
-This tool replaces manual spreadsheets used to track **EDI issues, pending PO confirmations, and inbound delivery challans (DC)**.
+The tool replaces manual spreadsheets used to track:
 
-It provides a simple **web interface for logging issues, closing records, and automatically tracking open problems**.
+- EDI issues
+- Pending PO confirmations
+- Inbound DC problems
+- Vendor follow-ups
+
+Operators log issues through a **web form**, and close them once resolved.
 
 ---
 
 # Overview
 
-Many warehouses maintain separate Excel sheets to track:
+Many warehouses track pending deliveries using manual Excel sheets.  
+This project digitizes that workflow using **Google Apps Script Web Apps**.
 
-- Vendor DCs without EDI
-- Pending purchase order confirmations
-- Inward deliveries waiting for EDI numbers
-- Manual follow-ups with customers
+Operators can:
 
-This project digitizes that process using **Google Apps Script Web Apps**.
+- Log DC or invoice issues
+- Track pending EDI confirmations
+- Close records once resolved
+- Monitor open issues via dashboard
 
-Operators log issues through a web form and close them once resolved.
-
-All records are stored in a central **Google Sheet database**.
+All records are stored in **Google Sheets**.
 
 ---
 
 # Features
 
-### Log DC / Invoice Issues
+## Log DC / Invoice Issues
+
 Operators can log:
 
 - Plant
@@ -45,28 +50,28 @@ Operators can log:
 - Dock
 - Remarks
 
-Records are stored in a central **MAIN_LOG** sheet.
+All entries are stored in the **MAIN_LOG** sheet.
 
 ---
 
-### Close Pending Records
+## Close Pending Records
 
-Operators can close open entries by entering:
+Operators close issues by entering:
 
-- EDI number (for Without EDI cases)
-- Customer invoice number (for Inward DC)
+- **EDI Number** (for Without EDI cases)
+- **Customer Invoice Number** (for Inward DC)
 
 The system automatically:
 
 - Updates status
 - Records closing date
-- Calculates time taken to resolve
+- Calculates time taken
 
 ---
 
-### Open Points Dashboard
+## Open Points Dashboard
 
-An **Open Points sheet** automatically displays all pending issues using a live filter.
+The **OPEN_POINTS** sheet automatically displays all pending issues.
 
 It includes:
 
@@ -75,13 +80,13 @@ It includes:
 - Aging tracker
 - Pending status
 
-This sheet can be shared directly with customers to highlight unresolved issues.
+This sheet can be shared with customers to highlight unresolved issues.
 
 ---
 
-### Aging Tracker
+## Aging Tracker
 
-The system automatically tracks how long an issue remained open.
+The system tracks how long each issue remains open.
 
 This helps identify:
 
@@ -91,11 +96,9 @@ This helps identify:
 
 ---
 
-### Concurrency Safe
+## Concurrency Safe
 
-The system uses **Google Apps Script LockService** to prevent conflicts when multiple users submit records simultaneously.
-
-This ensures reliable logging in multi-user environments.
+The application uses **Google Apps Script LockService** to prevent data conflicts when multiple users submit records simultaneously.
 
 ---
 
