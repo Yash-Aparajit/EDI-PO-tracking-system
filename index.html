@@ -7,17 +7,17 @@
 <style>
 
 body{
-font-family:Inter,Arial;
-background:#f4f6f8;
+font-family:Segoe UI,Arial;
 margin:0;
+background:#f3f5f7;
 }
 
 .header{
 background:#015eab;
 color:white;
-padding:20px;
-font-size:22px;
-font-weight:bold;
+padding:18px;
+font-size:20px;
+font-weight:600;
 }
 
 .tabs{
@@ -26,10 +26,10 @@ display:flex;
 
 .tab{
 flex:1;
-padding:15px;
 text-align:center;
+padding:14px;
+background:#e4e8ee;
 cursor:pointer;
-background:#e6eef7;
 }
 
 .tab.active{
@@ -37,47 +37,70 @@ background:#00713d;
 color:white;
 }
 
-.container{
-max-width:700px;
-margin:auto;
-padding:20px;
+.wrapper{
+display:flex;
+justify-content:center;
+padding:30px 10px;
 }
 
 .card{
+
+width:100%;
+max-width:520px;
 background:white;
 padding:25px;
 border-radius:14px;
-box-shadow:0 4px 20px rgba(0,0,0,0.08);
+box-shadow:0 6px 20px rgba(0,0,0,0.08);
+
 }
 
 label{
-font-weight:bold;
-margin-top:15px;
+font-weight:600;
 display:block;
+margin-top:14px;
 }
 
 input,select{
+
 width:100%;
 padding:12px;
 margin-top:6px;
 border-radius:8px;
 border:1px solid #ccc;
+font-size:15px;
+
 }
 
 button{
+
+width:100%;
+margin-top:22px;
+padding:14px;
+border:none;
+border-radius:10px;
 background:#015eab;
 color:white;
-border:none;
-padding:14px;
-border-radius:10px;
-margin-top:20px;
-width:100%;
 font-size:16px;
+cursor:pointer;
+
 }
 
-button:hover{
-background:#00713d;
+button:disabled{
+
+background:#999;
+cursor:not-allowed;
+
 }
+
+.msg{
+
+margin-top:15px;
+font-weight:600;
+
+}
+
+.success{color:green;}
+.error{color:red;}
 
 </style>
 
@@ -86,92 +109,71 @@ background:#00713d;
 <body>
 
 <div class="header">
-
-DC Tracking System
-
+EDI / PO System
 </div>
 
 <div class="tabs">
 
-<div class="tab active" onclick="showTab('entry')">
-
+<div class="tab active" onclick="switchTab('log')">
 Log DC
-
 </div>
 
-<div class="tab" onclick="showTab('close')">
-
+<div class="tab" onclick="switchTab('close')">
 Close DC
-
 </div>
 
 </div>
 
-<div class="container">
+<div class="wrapper">
 
-<div id="entry" class="card">
+<div class="card" id="logCard">
 
 <label>Plant</label>
-
 <select id="plant">
-
-<option>Pune</option>
 <option>Chakan</option>
+<option>Pune</option>
 <option>Sanand</option>
-
 </select>
 
 <label>Vendor</label>
-
-<input list="vendors" id="vendor">
-
-<datalist id="vendors"></datalist>
+<input list="vendorList" id="vendor">
+<datalist id="vendorList"></datalist>
 
 <label>DC No</label>
-
 <input type="number" id="dc">
 
 <label>Part No</label>
-
-<input list="parts" id="part" oninput="fetchDesc()">
-
-<datalist id="parts"></datalist>
-
-<label>Description</label>
-
-<input id="desc" readonly>
+<input list="partList" id="part">
+<datalist id="partList"></datalist>
 
 <label>Qty</label>
-
 <input type="number" id="qty">
 
 <label>Dock</label>
-
 <select id="dock">
-
 <option>1</option>
 <option>2</option>
 <option>3</option>
-
 </select>
 
-<button onclick="save()">Save Entry</button>
+<button id="saveBtn" onclick="save()">Save</button>
+
+<div id="msg" class="msg"></div>
 
 </div>
 
-<div id="close" class="card" style="display:none">
+<div class="card" id="closeCard" style="display:none">
 
 <label>DC No</label>
-
 <input list="openDC" id="closeDC">
-
 <datalist id="openDC"></datalist>
 
 <label>EDI No</label>
-
 <input id="edi">
 
-<button onclick="closeEntry()">Close DC</button>
+<button id="closeBtn" onclick="closeEntry()">Close</button>
+
+<div id="msg2" class="msg"></div>
 
 </div>
 
@@ -179,12 +181,14 @@ Close DC
 
 <script>
 
-function showTab(tab){
+/* TAB SWITCH */
 
-document.getElementById("entry").style.display=
-tab=="entry"?"block":"none";
+function switchTab(tab){
 
-document.getElementById("close").style.display=
+document.getElementById("logCard").style.display =
+tab=="log"?"block":"none";
+
+document.getElementById("closeCard").style.display =
 tab=="close"?"block":"none";
 
 }
@@ -195,14 +199,12 @@ window.onload=function(){
 
 google.script.run.withSuccessHandler(function(v){
 
-const list=document.getElementById("vendors");
+const list=document.getElementById("vendorList");
 
-v.forEach(function(i){
-
+v.forEach(i=>{
 let o=document.createElement("option");
 o.value=i;
 list.appendChild(o);
-
 });
 
 }).getVendors();
@@ -210,14 +212,12 @@ list.appendChild(o);
 
 google.script.run.withSuccessHandler(function(p){
 
-const list=document.getElementById("parts");
+const list=document.getElementById("partList");
 
-p.forEach(function(i){
-
+p.forEach(i=>{
 let o=document.createElement("option");
-o.value=i[0];
+o.value=i;
 list.appendChild(o);
-
 });
 
 }).getParts();
@@ -227,55 +227,57 @@ google.script.run.withSuccessHandler(function(d){
 
 const list=document.getElementById("openDC");
 
-d.forEach(function(i){
-
+d.forEach(i=>{
 let o=document.createElement("option");
 o.value=i;
 list.appendChild(o);
-
 });
 
 }).getOpenDC();
 
 }
 
-/* FETCH PART DESC */
-
-function fetchDesc(){
-
-const part=document.getElementById("part").value;
-
-google.script.run.withSuccessHandler(function(d){
-
-document.getElementById("desc").value=d;
-
-}).getPartDesc(part);
-
-}
-
-/* SAVE */
+/* SAVE ENTRY */
 
 function save(){
 
+const btn=document.getElementById("saveBtn");
+btn.disabled=true;
+btn.innerText="Saving...";
+
 const data={
 
-plant:document.getElementById("plant").value,
-vendor:document.getElementById("vendor").value,
-dc:document.getElementById("dc").value,
-part:document.getElementById("part").value,
-desc:document.getElementById("desc").value,
-qty:document.getElementById("qty").value,
-dock:document.getElementById("dock").value
+plant:plant.value,
+vendor:vendor.value,
+dc:dc.value,
+part:part.value,
+qty:qty.value,
+dock:dock.value
 
 };
 
-google.script.run.withSuccessHandler(function(){
+google.script.run
+.withSuccessHandler(function(res){
 
-alert("Saved");
+btn.disabled=false;
+btn.innerText="Save";
 
-location.reload();
+if(res.status){
 
-}).saveEntry(data);
+msg.innerHTML="Saved Successfully";
+msg.className="msg success";
+
+}
+
+else{
+
+msg.innerHTML=res.msg;
+msg.className="msg error";
+
+}
+
+})
+.saveEntry(data);
 
 }
 
@@ -283,20 +285,39 @@ location.reload();
 
 function closeEntry(){
 
+const btn=document.getElementById("closeBtn");
+btn.disabled=true;
+btn.innerText="Closing...";
+
 const data={
 
-dc:document.getElementById("closeDC").value,
-edi:document.getElementById("edi").value
+dc:closeDC.value,
+edi:edi.value
 
 };
 
-google.script.run.withSuccessHandler(function(){
+google.script.run
+.withSuccessHandler(function(res){
 
-alert("Closed");
+btn.disabled=false;
+btn.innerText="Close";
 
-location.reload();
+if(res.status){
 
-}).closeDC(data);
+msg2.innerHTML="Closed Successfully";
+msg2.className="msg success";
+
+}
+
+else{
+
+msg2.innerHTML=res.msg;
+msg2.className="msg error";
+
+}
+
+})
+.closeDC(data);
 
 }
 
