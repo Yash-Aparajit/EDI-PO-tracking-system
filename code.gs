@@ -59,6 +59,7 @@ sh.appendRow([
 sr,
 today,
 data.plant,
+data.type,
 data.vendor,
 data.dc,
 "",
