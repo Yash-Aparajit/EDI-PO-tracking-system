@@ -52,7 +52,7 @@ const sr = sh.getLastRow();
 const today = Utilities.formatDate(
 new Date(),
 Session.getScriptTimeZone(),
-"dd/MM/yyyy"
+"dd/MM/yyyy HH:mm:ss"
 );
 
 sh.appendRow([
@@ -132,6 +132,13 @@ sh.getRange(i+1,6).setValue(data.edi);
 
 sh.getRange(i+1,10).setValue("Completed");
 
+const start = rows[i][1];
+const end = new Date();
+
+const diff = (end - new Date(start)) / 86400000;
+
+sh.getRange(i+1,13).setValue(diff);
+
 sh.getRange(i+1,11).setValue(
 Utilities.formatDate(new Date(),
 Session.getScriptTimeZone(),
@@ -161,4 +168,3 @@ lock.releaseLock();
 }
 
 }
-
