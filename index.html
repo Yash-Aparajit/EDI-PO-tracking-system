@@ -135,8 +135,8 @@ Close DC
 
 <label>Plant</label>
 <select id="plant">
-<option>Your_Location_1</option>
-<option>Your_Location_2</option>
+<option>Chakan</option>
+<option>Pune</option>
 </select>
 
 <label>Type</label>
@@ -177,9 +177,25 @@ Close DC
 
 <div class="card" id="closeCard" style="display:none">
 
+<label>Type</label>
+<select id="closeType" onchange="toggleCloseFields()">
+<option>Without EDI</option>
+<option>Inward DC</option>
+</select>
+
 <label>DC No</label>
 <input list="openDC" id="closeDC">
 <datalist id="openDC"></datalist>
+
+<div id="ediField">
+<label>EDI No</label>
+<input id="edi" type="number">
+</div>
+
+<div id="invoiceField" style="display:none">
+<label>Invoice No</label>
+<input id="invoice" type="number">
+</div>
 
 <label>EDI No</label>
 <input id="edi" type="number" inputmode="numeric" pattern="[0-9]*">
@@ -334,7 +350,27 @@ msg2.className="msg error";
 
 }
 
-  
+
+/* CLOSE TOGGLE */
+
+function toggleCloseFields(){
+
+const type = document.getElementById("closeType").value;
+
+if(type=="Without EDI"){
+
+ediField.style.display="block";
+invoiceField.style.display="none";
+
+}else{
+
+ediField.style.display="none";
+invoiceField.style.display="block";
+
+}
+
+}
 </script>
+
 </body>
 </html>
