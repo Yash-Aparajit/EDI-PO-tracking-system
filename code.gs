@@ -67,7 +67,8 @@ data.part,
 data.qty,
 data.dock,
 "Pending",
-""
+"",
+data.remark
 ]);
 
 return {status:true};
@@ -167,4 +168,5 @@ finally{
 lock.releaseLock();
 
 }
+
 }
