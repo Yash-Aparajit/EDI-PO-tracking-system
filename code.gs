@@ -71,6 +71,7 @@ data.dock,
 data.remark
 ]);
 
+
 return {status:true};
 
 }
@@ -137,6 +138,7 @@ sh.getRange(i+1,6).setValue(data.edi);
 if(data.type=="Inward DC"){
 sh.getRange(i+1,14).setValue(data.invoice);
 }
+
 
 sh.getRange(i+1,10).setValue("Completed");
 
