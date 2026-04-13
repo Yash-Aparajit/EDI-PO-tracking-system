@@ -130,7 +130,13 @@ for(let i=1;i<rows.length;i++){
 
 if(rows[i][4]==data.dc){
 
+if(data.type=="Without EDI"){
 sh.getRange(i+1,6).setValue(data.edi);
+}
+
+if(data.type=="Inward DC"){
+sh.getRange(i+1,14).setValue(data.invoice);
+}
 
 sh.getRange(i+1,10).setValue("Completed");
 
