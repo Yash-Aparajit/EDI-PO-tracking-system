@@ -47,7 +47,8 @@ try{
 
 const sh = SpreadsheetApp.getActive().getSheetByName(MAIN);
 
-const sr = sh.getLastRow();
+const last = sh.getRange("A:A").getValues().filter(String).length;
+const sr = last;
 
 const today = Utilities.formatDate(
 new Date(),
@@ -70,7 +71,6 @@ data.dock,
 "",
 data.remark
 ]);
-
 
 return {status:true};
 
@@ -102,7 +102,7 @@ let arr=[];
 
 for(let i=1;i<data.length;i++){
 
-if(data[i][9]=="Pending"){
+if(data[i][10]=="Pending"){
 
 arr.push(data[i][4]);
 
@@ -129,7 +129,7 @@ const rows = sh.getDataRange().getValues();
 
 for(let i=1;i<rows.length;i++){
 
-if(rows[i][4]==data.dc){
+if(rows[i][5] == data.dc){
 
 if(data.type=="Without EDI"){
 sh.getRange(i+1,6).setValue(data.edi);
@@ -138,7 +138,6 @@ sh.getRange(i+1,6).setValue(data.edi);
 if(data.type=="Inward DC"){
 sh.getRange(i+1,14).setValue(data.invoice);
 }
-
 
 sh.getRange(i+1,10).setValue("Completed");
 
