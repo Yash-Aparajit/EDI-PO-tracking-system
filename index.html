@@ -230,11 +230,26 @@ Close DC
 
 function switchTab(tab){
 
-document.getElementById("logCard").style.display =
-tab=="log"?"block":"none";
+const logTab = document.querySelectorAll(".tab")[0];
+const closeTab = document.querySelectorAll(".tab")[1];
 
-document.getElementById("closeCard").style.display =
-tab=="close"?"block":"none";
+if(tab=="log"){
+
+document.getElementById("logCard").style.display="block";
+document.getElementById("closeCard").style.display="none";
+
+logTab.classList.add("active");
+closeTab.classList.remove("active");
+
+}else{
+
+document.getElementById("logCard").style.display="none";
+document.getElementById("closeCard").style.display="block";
+
+closeTab.classList.add("active");
+logTab.classList.remove("active");
+
+}
 
 }
 
@@ -320,8 +335,10 @@ msg.innerHTML=res.msg;
 msg.className="msg error";
 
 }
+
 })
 .saveEntry(data);
+
 }
 
 /* CLOSE */
@@ -377,7 +394,6 @@ ediField.style.display="block";
 invoiceField.style.display="none";
 
 }else{
-
 ediField.style.display="none";
 invoiceField.style.display="block";
 
@@ -385,6 +401,5 @@ invoiceField.style.display="block";
 
 }
 </script>
-
 </body>
 </html>
