@@ -213,9 +213,6 @@ Close DC
 <input id="invoice" type="number">
 </div>
 
-<label>EDI No</label>
-<input id="edi" type="number" inputmode="numeric" pattern="[0-9]*">
-
 <button id="closeBtn" onclick="closeEntry()">Close</button>
 
 <div id="msg2" class="msg"></div>
@@ -327,6 +324,7 @@ btn.innerText="Save";
 if(res.status){
 
 msg.innerHTML="Saved Successfully";
+clearForm();
 msg.className="msg success";
 
 }
@@ -366,8 +364,10 @@ btn.innerText="Closing...";
 
 const data={
 
+type:closeType.value,
 dc:closeDC.value,
-edi:edi.value
+edi:edi.value,
+invoice:invoice.value
 
 };
 
