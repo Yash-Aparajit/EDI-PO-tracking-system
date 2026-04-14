@@ -123,6 +123,10 @@ font-size:18px;
 
 }
 
+#closeCard div{
+margin-top:10px;
+}
+
 </style>
 
 </head>
@@ -371,6 +375,14 @@ remark.value="";
 
 function closeEntry(){
 
+if(!closeType.value || !closeDC.value){
+msg2.innerHTML="Select required fields";
+msg2.className="msg error";
+btn.disabled=false;
+btn.innerText="Close";
+return;
+}
+
 const btn=document.getElementById("closeBtn");
 btn.disabled=true;
 btn.innerText="Closing...";
@@ -378,7 +390,10 @@ btn.innerText="Closing...";
 const data={
 
 type:closeType.value,
-dc:closeDC.value,
+const selected = closeDC.value.split(" | ");
+
+dc: selected[1],
+vendor: selected[0],
 edi:edi.value,
 invoice:invoice.value
 
