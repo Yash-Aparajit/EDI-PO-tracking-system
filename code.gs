@@ -63,13 +63,15 @@ data.plant,
 data.type,
 data.vendor,
 data.dc,
-"",
+"",           // EDI No
+"",           // Invoice No
 data.part,
 data.qty,
 data.dock,
 "Pending",
-"",
-data.remark
+"",           // Closed On
+data.remark,
+""            // Time Taken
 ]);
 
 return {status:true};
@@ -104,7 +106,7 @@ for(let i=1;i<data.length;i++){
 
 if(data[i][10]=="Pending"){
 
-arr.push(data[i][4]);
+arr.push(data[i][5]);
 
 }
 
@@ -146,9 +148,9 @@ const end = new Date();
 
 const diff = (end - new Date(start)) / 86400000;
 
-sh.getRange(i+1,13).setValue(diff);
+sh.getRange(i+1,15).setValue(diff);
 
-sh.getRange(i+1,11).setValue(
+sh.getRange(i+1,13).setValue(
 Utilities.formatDate(new Date(),
 Session.getScriptTimeZone(),
 "dd/MM/yyyy")
@@ -177,3 +179,5 @@ lock.releaseLock();
 }
 
 }
+
+
