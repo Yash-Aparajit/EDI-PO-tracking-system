@@ -47,8 +47,7 @@ try{
 
 const sh = SpreadsheetApp.getActive().getSheetByName(MAIN);
 
-const last = sh.getRange("A:A").getValues().filter(String).length;
-const sr = last;
+const sr = sh.getLastRow();
 
 const today = Utilities.formatDate(
 new Date(),
@@ -104,7 +103,7 @@ let arr=[];
 
 for(let i=1;i<data.length;i++){
 
-if(data[i][10]=="Pending"){
+if(data[i][11]=="Pending"){
 
 arr.push(data[i][5]);
 
@@ -131,7 +130,7 @@ const rows = sh.getDataRange().getValues();
 
 for(let i=1;i<rows.length;i++){
 
-if(rows[i][5] == data.dc){
+if(rows[i][5] == data.dc && rows[i][3] == data.type){
 
 if(data.type=="Without EDI"){
 sh.getRange(i+1,6).setValue(data.edi);
@@ -179,5 +178,3 @@ lock.releaseLock();
 }
 
 }
-
-
