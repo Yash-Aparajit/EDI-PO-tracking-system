@@ -196,6 +196,7 @@ Close DC
 
 <div class="card" id="closeCard" style="display:none">
 
+<label>Type</label>
 <select id="closeType" onchange="toggleCloseFields()">
 <option value="">--Select--</option>
 <option>Without EDI</option>
@@ -304,6 +305,15 @@ function save(){
 const btn=document.getElementById("saveBtn");
 btn.disabled=true;
 btn.innerText="Saving...";
+
+if(!plant.value || !type.value || !vendor.value || !dc.value){
+msg.innerHTML="Please fill required fields";
+msg.className="msg error";
+btn.disabled=false;
+btn.innerText="Save";
+return;
+}
+
 
 const data={
 
