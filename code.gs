@@ -105,7 +105,7 @@ for(let i=1;i<data.length;i++){
 
 if(data[i][11]=="Pending"){
 
-arr.push(data[i][5]);
+arr.push(data[i][4] + " | " + data[i][5]);
 
 }
 
@@ -130,7 +130,11 @@ const rows = sh.getDataRange().getValues();
 
 for(let i=1;i<rows.length;i++){
 
-if(rows[i][5] == data.dc && rows[i][3] == data.type){
+if(
+  rows[i][5] == data.dc &&
+  rows[i][4] == data.vendor &&
+  rows[i][3] == data.type
+){
 
 if(data.type=="Without EDI"){
 sh.getRange(i+1,6).setValue(data.edi);
@@ -145,7 +149,7 @@ sh.getRange(i+1,12).setValue("Completed");
 const start = rows[i][1];
 const end = new Date();
 
-const diff = (end - new Date(start)) / 86400000;
+const diff = (end - new Date(start)) / (1000 * 60 * 60 * 24);
 
 sh.getRange(i+1,15).setValue(diff);
 
