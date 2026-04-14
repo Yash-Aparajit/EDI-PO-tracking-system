@@ -308,11 +308,13 @@ btn.innerText="Saving...";
 const data={
 
 plant:plant.value,
+type:type.value,
 vendor:vendor.value,
 dc:dc.value,
 part:part.value,
 qty:qty.value,
-dock:dock.value
+dock:dock.value,
+remark:remark.value
 
 };
 
@@ -338,6 +340,19 @@ msg.className="msg error";
 
 })
 .saveEntry(data);
+
+}
+
+function clearForm(){
+
+plant.value="";
+type.value="";
+vendor.value="";
+dc.value="";
+part.value="";
+qty.value="";
+dock.value="";
+remark.value="";
 
 }
 
