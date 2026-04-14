@@ -136,10 +136,10 @@ sh.getRange(i+1,6).setValue(data.edi);
 }
 
 if(data.type=="Inward DC"){
-sh.getRange(i+1,14).setValue(data.invoice);
+sh.getRange(i+1,8).setValue(data.invoice);
 }
 
-sh.getRange(i+1,10).setValue("Completed");
+sh.getRange(i+1,12).setValue("Completed");
 
 const start = rows[i][1];
 const end = new Date();
@@ -177,4 +177,3 @@ lock.releaseLock();
 }
 
 }
-
