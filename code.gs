@@ -1,8 +1,15 @@
+/* =========================================================
+   GLOBAL CONSTANTS
+   ========================================================= */
+
 const MAIN = "MAIN_LOG";
 const VENDOR = "MASTER_VENDOR";
 const PART = "MASTER_PART";
 
-/* WEB APP */
+
+/* =========================================================
+   WEB APP ENTRY POINT
+   ========================================================= */
 
 function doGet() {
   return HtmlService
@@ -10,181 +17,214 @@ function doGet() {
     .setTitle("EDI / PO Tracking");
 }
 
-/* FETCH VENDORS */
 
-function getVendors(){
+/* =========================================================
+   FETCH VENDORS FROM MASTER SHEET
+   ========================================================= */
 
-const sh = SpreadsheetApp.getActive().getSheetByName(VENDOR);
+function getVendors() {
 
-return sh.getRange(2,1,sh.getLastRow()-1,1)
-.getValues()
-.flat()
-.filter(String);
+  const sh = SpreadsheetApp
+    .getActive()
+    .getSheetByName(VENDOR);
+
+  return sh
+    .getRange(2, 1, sh.getLastRow() - 1, 1)
+    .getValues()
+    .flat()
+    .filter(String);
+}
+
+
+/* =========================================================
+   FETCH PART NUMBERS FROM MASTER SHEET
+   ========================================================= */
+
+function getParts() {
+
+  const sh = SpreadsheetApp
+    .getActive()
+    .getSheetByName(PART);
+
+  return sh
+    .getRange(2, 1, sh.getLastRow() - 1, 1)
+    .getValues()
+    .flat()
+    .filter(String);
+}
+
+
+/* =========================================================
+   SAVE LOG DC ENTRY
+   ========================================================= */
+
+function saveEntry(data) {
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+
+  try {
+
+    const sh = SpreadsheetApp
+      .getActive()
+      .getSheetByName(MAIN);
+
+    const sr = sh.getLastRow();
+
+    const today = Utilities.formatDate(
+      new Date(),
+      Session.getScriptTimeZone(),
+      "dd/MM/yyyy HH:mm:ss"
+    );
+
+    sh.appendRow([
+      sr,
+      today,
+      data.plant,
+      data.type,
+      data.vendor,
+      data.dc,
+      "",             // EDI No
+      "",             // Invoice No
+      data.part,
+      data.qty,
+      data.dock,
+      "Pending",
+      "",             // Closed On
+      data.remark,
+      ""              // Time Taken
+    ]);
+
+    return { status: true };
+
+  }
+  catch (err) {
+
+    return { status: false, msg: err.message };
+
+  }
+  finally {
+
+    lock.releaseLock();
+
+  }
 
 }
 
-/* FETCH PARTS */
 
-function getParts(){
+/* =========================================================
+   FETCH OPEN DC LIST
+   ========================================================= */
 
-const sh = SpreadsheetApp.getActive().getSheetByName(PART);
+function getOpenDC() {
 
-return sh.getRange(2,1,sh.getLastRow()-1,1)
-.getValues()
-.flat()
-.filter(String);
+  const sh = SpreadsheetApp
+    .getActive()
+    .getSheetByName(MAIN);
 
-}
+  const data = sh.getDataRange().getValues();
 
-/* SAVE ENTRY */
+  let arr = [];
 
-function saveEntry(data){
+  for (let i = 1; i < data.length; i++) {
 
-const lock = LockService.getScriptLock();
-lock.waitLock(20000);
+    if (data[i][11] == "Pending") {
 
-try{
+      arr.push(data[i][4] + " | " + data[i][5]);
 
-const sh = SpreadsheetApp.getActive().getSheetByName(MAIN);
+    }
 
-const sr = sh.getLastRow();
+  }
 
-const today = Utilities.formatDate(
-new Date(),
-Session.getScriptTimeZone(),
-"dd/MM/yyyy HH:mm:ss"
-);
-
-sh.appendRow([
-sr,
-today,
-data.plant,
-data.type,
-data.vendor,
-data.dc,
-"",           // EDI No
-"",           // Invoice No
-data.part,
-data.qty,
-data.dock,
-"Pending",
-"",           // Closed On
-data.remark,
-""            // Time Taken
-]);
-
-return {status:true};
+  return arr;
 
 }
 
-catch(err){
 
-return {status:false,msg:err.message};
+/* =========================================================
+   CLOSE DC ENTRY
+   ========================================================= */
 
-}
+function closeDC(data) {
 
-finally{
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
 
-lock.releaseLock();
+  try {
 
-}
+    const sh = SpreadsheetApp
+      .getActive()
+      .getSheetByName(MAIN);
 
-}
+    const rows = sh.getDataRange().getValues();
 
-/* GET OPEN DC */
+    let found = false;
 
-function getOpenDC(){
+    for (let i = 1; i < rows.length; i++) {
 
-const sh = SpreadsheetApp.getActive().getSheetByName(MAIN);
+      if (
+        rows[i][5] == data.dc &&
+        rows[i][4] == data.vendor &&
+        rows[i][3] == data.type
+      ) {
 
-const data = sh.getDataRange().getValues();
+        /* Write EDI or Invoice depending on type */
 
-let arr=[];
+        if (data.type == "Without EDI") {
+          sh.getRange(i + 1, 6).setValue(data.edi);
+        }
 
-for(let i=1;i<data.length;i++){
+        if (data.type == "Inward DC") {
+          sh.getRange(i + 1, 8).setValue(data.invoice);
+        }
 
-if(data[i][11]=="Pending"){
+        /* Mark as completed */
 
-arr.push(data[i][4] + " | " + data[i][5]);
+        sh.getRange(i + 1, 12).setValue("Completed");
 
-}
+        /* Calculate aging duration */
 
-}
+        const start = rows[i][1];
+        const end = new Date();
 
-return arr;
+        const diff = (end - new Date(start)) / (1000 * 60 * 60 * 24);
 
-}
+        sh.getRange(i + 1, 15).setValue(diff);
 
-/* CLOSE DC */
+        /* Set closed date */
 
-function closeDC(data){
+        sh.getRange(i + 1, 13).setValue(
+          Utilities.formatDate(
+            new Date(),
+            Session.getScriptTimeZone(),
+            "dd/MM/yyyy"
+          )
+        );
 
-const lock = LockService.getScriptLock();
-lock.waitLock(20000);
+        found = true;
+        break;
 
-try{
+      }
 
-const sh = SpreadsheetApp.getActive().getSheetByName(MAIN);
+    }
 
-const rows = sh.getDataRange().getValues();
+    if (found) {
+      return { status: true };
+    }
+    else {
+      return { status: false, msg: "Record not found" };
+    }
 
-let found=false;
-for(let i=1;i<rows.length;i++){
+  }
+  catch (err) {
 
-if(
-  rows[i][5] == data.dc &&
-  rows[i][4] == data.vendor &&
-  rows[i][3] == data.type
-){
+    return { status: false, msg: err.message };
 
-if(data.type=="Without EDI"){
-sh.getRange(i+1,6).setValue(data.edi);
-}
+  }
+  finally {
 
-if(data.type=="Inward DC"){
-sh.getRange(i+1,8).setValue(data.invoice);
-}
+    lock.releaseLock();
 
-sh.getRange(i+1,12).setValue("Completed");
-
-const start = rows[i][1];
-const end = new Date();
-
-const diff = (end - new Date(start)) / (1000 * 60 * 60 * 24);
-
-sh.getRange(i+1,15).setValue(diff);
-
-sh.getRange(i+1,13).setValue(
-Utilities.formatDate(new Date(),
-Session.getScriptTimeZone(),
-"dd/MM/yyyy")
-);
-
-found=true;
-break;
-
-}
-
-}
-
-if(found){
-return {status:true};
-}else{
-return {status:false,msg:"Record not found"};
-}
-
-}
-
-catch(err){
-
-return {status:false,msg:err.message};
-
-}
-
-finally{
-
-lock.releaseLock();
-
-}
+  }
 
 }
