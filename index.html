@@ -410,6 +410,12 @@ if(res.status){
 msg2.innerHTML="Closed Successfully";
 msg2.className="msg success";
 
+closeType.value="";
+closeDC.value="";
+edi.value="";
+invoice.value="";
+toggleCloseFields();
+
 }
 
 else{
@@ -442,7 +448,6 @@ ediField.style.display="none";
 invoiceField.style.display="block";
 
 }
-
 }
 </script>
 
