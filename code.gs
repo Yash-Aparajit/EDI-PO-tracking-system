@@ -29,6 +29,7 @@ function getVendors() {
     .getSheetByName(VENDOR);
 
   return sh
+
     .getRange(2, 1, sh.getLastRow() - 1, 1)
     .getValues()
     .flat()
@@ -168,7 +169,10 @@ function closeDC(data) {
     for (let i = 1; i < rows.length; i++) {
 
       if (
-        rows[i][5] == data.dc &&
+        (
+          (data.type=="Without EDI" && rows[i][5]==data.dc) ||
+          (data.type=="Inward DC" && rows[i][6]==data.dc)
+        ) &&
         rows[i][4] == data.vendor &&
         rows[i][3] == data.type
       ) {
@@ -197,6 +201,7 @@ function closeDC(data) {
         sh.getRange(i + 1, 15).setValue(diff);
 
         /* Set closed date */
+
 
         sh.getRange(i + 1, 13).setValue(
           Utilities.formatDate(
