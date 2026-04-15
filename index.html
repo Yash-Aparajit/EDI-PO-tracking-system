@@ -332,13 +332,26 @@ function switchTab(tab){
     closeTab.classList.remove("active");
 
   }else{
-
     document.getElementById("logCard").style.display="none";
     document.getElementById("closeCard").style.display="block";
 
     closeTab.classList.add("active");
     logTab.classList.remove("active");
 
+    /* Reload Open DC list */
+
+    google.script.run.withSuccessHandler(function(d){
+
+    const list=document.getElementById("openDC");
+    list.innerHTML="";
+
+    d.forEach(i=>{
+    let o=document.createElement("option");
+    o.value=i;
+    list.appendChild(o);
+    });
+
+    }).getOpenDC();
   }
 
 }
@@ -430,6 +443,7 @@ function save(){
     qty:qty.value,
     dock:dock.value,
     remark:remark.value
+     
   };
 
 
@@ -503,17 +517,19 @@ function closeEntry(){
 
   const data={
     type:closeType.value,
-    dc:selected[1],
-    vendor:selected[0],
+    dc: selected.length>1 ? selected[1] : selected[0],
+    vendor: selected.length>1 ? selected[0] : "",
     edi:edi.value,
     invoice:invoice.value
   };
 
 
   google.script.run
+     
   .withSuccessHandler(function(res){
 
     btn.disabled=false;
+     
     btn.innerText="Close";
 
     if(res.status){
@@ -529,8 +545,9 @@ function closeEntry(){
       closeDC.focus();
 
       setTimeout(()=>{
-        msg2.innerHTML="";
-      },3000);
+      msg2.innerHTML="";
+      msg2.className="msg";
+      },10000);
 
     }else{
 
@@ -557,9 +574,12 @@ function toggleCloseFields(){
 
     ediField.style.display="block";
     invoiceField.style.display="none";
+
   }else{
+
     ediField.style.display="none";
     invoiceField.style.display="block";
+
   }
 
 }
