@@ -29,7 +29,6 @@ function getVendors() {
     .getSheetByName(VENDOR);
 
   return sh
-
     .getRange(2, 1, sh.getLastRow() - 1, 1)
     .getValues()
     .flat()
@@ -180,11 +179,11 @@ function closeDC(data) {
         /* Write EDI or Invoice depending on type */
 
         if (data.type == "Without EDI") {
-          sh.getRange(i + 1, 7).setValue(data.edi);
+          sh.getRange(i + 1, 8).setValue(data.edi);
         }
 
         if (data.type == "Inward DC") {
-          sh.getRange(i + 1, 8).setValue(data.invoice);
+          sh.getRange(i + 1, 9).setValue(data.invoice);
         }
 
         /* Mark as completed */
@@ -201,7 +200,6 @@ function closeDC(data) {
         sh.getRange(i + 1, 15).setValue(diff);
 
         /* Set closed date */
-
 
         sh.getRange(i + 1, 13).setValue(
           Utilities.formatDate(
