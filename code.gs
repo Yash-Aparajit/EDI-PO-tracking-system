@@ -83,9 +83,10 @@ function saveEntry(data) {
       data.plant,
       data.type,
       data.vendor,
-      data.dc,
-      "",             // EDI No
-      "",             // Invoice No
+      data.type=="Without EDI" ? data.dc : "",   // Vendor Invoice No (F)
+      data.type=="Inward DC" ? data.dc : "",     // DC No (G)
+      "",                                        // EDI No (H)
+      "",                                        // Customer Invoice No (I)
       data.part,
       data.qty,
       data.dock,
@@ -137,7 +138,6 @@ function getOpenDC() {
   }
 
   return arr;
-
 }
 
 
@@ -171,7 +171,7 @@ function closeDC(data) {
         /* Write EDI or Invoice depending on type */
 
         if (data.type == "Without EDI") {
-          sh.getRange(i + 1, 6).setValue(data.edi);
+          sh.getRange(i + 1, 7).setValue(data.edi);
         }
 
         if (data.type == "Inward DC") {
