@@ -385,7 +385,6 @@ btn.innerText="Close";
 return;
 }
 
-const btn=document.getElementById("closeBtn");
 btn.disabled=true;
 btn.innerText="Closing...";
 
@@ -418,6 +417,9 @@ edi.value="";
 invoice.value="";
 toggleCloseFields();
 closeDC.focus();
+setTimeout(()=>{
+msg2.innerHTML="";
+},3000);
 
 }
 
@@ -449,11 +451,9 @@ invoiceField.style.display="none";
 
 ediField.style.display="none";
 invoiceField.style.display="block";
-
 }
 
 }
-  
 </script>
 
 </body>
