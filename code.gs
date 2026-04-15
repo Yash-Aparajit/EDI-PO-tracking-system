@@ -131,13 +131,18 @@ function getOpenDC() {
 
     if (data[i][11] == "Pending") {
 
-      arr.push(data[i][4] + " | " + data[i][5]);
+      if(data[i][3]=="Without EDI"){
+      arr.push(data[i][4] + " | " + data[i][5]);   // Vendor Invoice
+      }else{
+      arr.push(data[i][4] + " | " + data[i][6]);   // DC No
+      }
 
     }
 
   }
 
   return arr;
+
 }
 
 
