@@ -1,130 +1,174 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 
+/* =========================================================
+   GLOBAL PAGE STYLES
+   ========================================================= */
+
 body{
-font-family:Segoe UI,Arial;
-margin:0;
-background:#f3f5f7;
+  font-family:Segoe UI,Arial;
+  margin:0;
+  background:#f3f5f7;
 }
+
+
+/* =========================================================
+   HEADER BAR
+   ========================================================= */
 
 .header{
-background:#015eab;
-color:white;
-padding:18px;
-font-size:20px;
-font-weight:600;
-text-align:center;
+  background:#015eab;
+  color:white;
+  padding:18px;
+  font-size:20px;
+  font-weight:600;
+  text-align:center;
 }
 
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
 .tabs{
-display:flex;
+  display:flex;
 }
 
 .tab{
-flex:1;
-text-align:center;
-padding:14px;
-background:#d3d7dd;
-cursor:pointer;
-transition:0.2s;
+  flex:1;
+  text-align:center;
+  padding:14px;
+  background:#d3d7dd;
+  cursor:pointer;
+  transition:0.2s;
 }
 
 .tab.active{
-background:#00713d;
-color:white;
-font-weight:600;
+  background:#00713d;
+  color:white;
+  font-weight:600;
 }
 
 .tab:hover{
-background:#c7ccd3;
+  background:#c7ccd3;
 }
+
+
+/* =========================================================
+   MAIN WRAPPER
+   ========================================================= */
 
 .wrapper{
-display:flex;
-justify-content:center;
-padding:30px 10px;
+  display:flex;
+  justify-content:center;
+  padding:30px 10px;
 }
+
+
+/* =========================================================
+   CARD LAYOUT
+   ========================================================= */
 
 .card{
-width:100%;
-max-width:520px;
-background:white;
-padding:30px;
-border-radius:16px;
-box-shadow:0 8px 24px rgba(0,0,0,0.08);
-box-sizing:border-box;
+  width:100%;
+  max-width:520px;
+  background:white;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.08);
+  box-sizing:border-box;
 }
 
+
+/* =========================================================
+   FORM ELEMENTS
+   ========================================================= */
+
 label{
-font-weight:600;
-display:block;
-margin-top:14px;
+  font-weight:600;
+  display:block;
+  margin-top:14px;
 }
 
 input,select{
-width:100%;
-padding:12px;
-margin-top:6px;
-border-radius:8px;
-border:1px solid #ccc;
-font-size:15px;
-box-sizing:border-box;
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:15px;
+  box-sizing:border-box;
 }
 
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
 button{
-
-width:100%;
-margin-top:22px;
-padding:14px;
-border:none;
-border-radius:10px;
-background:#015eab;
-color:white;
-font-size:16px;
-cursor:pointer;
-
+  width:100%;
+  margin-top:22px;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background:#015eab;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
 }
 
 button:disabled{
-
-background:#999;
-cursor:not-allowed;
-
+  background:#999;
+  cursor:not-allowed;
 }
 
+
+/* =========================================================
+   MESSAGE TEXT
+   ========================================================= */
+
 .msg{
-
-margin-top:15px;
-font-weight:600;
-
+  margin-top:15px;
+  font-weight:600;
 }
 
 .success{color:green;}
 .error{color:red;}
 
+
+/* =========================================================
+   MOBILE RESPONSIVE
+   ========================================================= */
+
 @media(max-width:600px){
 
-.card{
-padding:22px;
+  .card{
+    padding:22px;
+  }
+
+  input,select,button{
+    font-size:16px;
+  }
+
+  .header{
+    font-size:18px;
+  }
+
 }
 
-input,select,button{
-font-size:16px;
-}
 
-.header{
-font-size:18px;
-}
-
-}
+/* =========================================================
+   CLOSE FORM SPACING
+   ========================================================= */
 
 #closeCard div{
-margin-top:10px;
+  margin-top:10px;
 }
 
 </style>
@@ -133,23 +177,43 @@ margin-top:10px;
 
 <body>
 
+
+<!-- ======================================================
+     HEADER
+====================================================== -->
+
 <div class="header">
-EDI / PO System
+  EDI / PO System
 </div>
+
+
+<!-- ======================================================
+     TAB NAVIGATION
+====================================================== -->
 
 <div class="tabs">
 
-<div class="tab active" onclick="switchTab('log')">
-Log DC
+  <div class="tab active" onclick="switchTab('log')">
+    Log DC
+  </div>
+
+  <div class="tab" onclick="switchTab('close')">
+    Close DC
+  </div>
+
 </div>
 
-<div class="tab" onclick="switchTab('close')">
-Close DC
-</div>
 
-</div>
+<!-- ======================================================
+     MAIN FORM WRAPPER
+====================================================== -->
 
 <div class="wrapper">
+
+
+<!-- ======================================================
+     LOG DC FORM
+====================================================== -->
 
 <div class="card" id="logCard">
 
@@ -160,6 +224,7 @@ Close DC
 <option>Pune</option>
 </select>
 
+
 <label>Type</label>
 <select id="type">
 <option value="">--Select--</option>
@@ -167,19 +232,24 @@ Close DC
 <option>Inward DC</option>
 </select>
 
+
 <label>Vendor</label>
 <input list="vendorList" id="vendor">
 <datalist id="vendorList"></datalist>
 
+
 <label>DC No</label>
 <input type="number" id="dc" inputmode="numeric" pattern="[0-9]*">
+
 
 <label>Part No</label>
 <input list="partList" id="part" inputmode="numeric" pattern="[0-9]*">
 <datalist id="partList"></datalist>
 
+
 <label>Qty</label>
 <input type="number" id="qty">
+
 
 <label>Dock</label>
 <select id="dock">
@@ -189,14 +259,22 @@ Close DC
 <option>3</option>
 </select>
 
+
 <label>Remark</label>
 <input id="remark" type="text">
+
 
 <button id="saveBtn" onclick="save()">Save</button>
 
 <div id="msg" class="msg"></div>
 
 </div>
+
+
+
+<!-- ======================================================
+     CLOSE DC FORM
+====================================================== -->
 
 <div class="card" id="closeCard" style="display:none">
 
@@ -207,19 +285,23 @@ Close DC
 <option>Inward DC</option>
 </select>
 
+
 <label>DC No</label>
 <input id="closeDC" list="openDC">
 <datalist id="openDC"></datalist>
+
 
 <div id="ediField">
 <label>EDI No</label>
 <input id="edi" type="number">
 </div>
 
+
 <div id="invoiceField" style="display:none">
 <label>Invoice No</label>
 <input id="invoice" type="number">
 </div>
+
 
 <button id="closeBtn" onclick="closeEntry()">Close</button>
 
@@ -229,231 +311,259 @@ Close DC
 
 </div>
 
+
 <script>
 
-/* TAB SWITCH */
+/* =========================================================
+   TAB SWITCHING
+   ========================================================= */
 
 function switchTab(tab){
 
-const logTab = document.querySelectorAll(".tab")[0];
-const closeTab = document.querySelectorAll(".tab")[1];
+  const logTab = document.querySelectorAll(".tab")[0];
+  const closeTab = document.querySelectorAll(".tab")[1];
 
-if(tab=="log"){
+  if(tab=="log"){
 
-document.getElementById("logCard").style.display="block";
-document.getElementById("closeCard").style.display="none";
+    document.getElementById("logCard").style.display="block";
+    document.getElementById("closeCard").style.display="none";
 
-logTab.classList.add("active");
-closeTab.classList.remove("active");
+    logTab.classList.add("active");
+    closeTab.classList.remove("active");
 
-}else{
+  }else{
 
-document.getElementById("logCard").style.display="none";
-document.getElementById("closeCard").style.display="block";
+    document.getElementById("logCard").style.display="none";
+    document.getElementById("closeCard").style.display="block";
 
-closeTab.classList.add("active");
-logTab.classList.remove("active");
+    closeTab.classList.add("active");
+    logTab.classList.remove("active");
+
+  }
 
 }
 
-}
 
-/* LOAD DATA */
+/* =========================================================
+   LOAD MASTER DATA
+   ========================================================= */
 
 window.onload=function(){
 
-google.script.run.withSuccessHandler(function(v){
+  /* Vendors */
 
-const list=document.getElementById("vendorList");
+  google.script.run.withSuccessHandler(function(v){
 
-v.forEach(i=>{
-let o=document.createElement("option");
-o.value=i;
-list.appendChild(o);
-});
+    const list=document.getElementById("vendorList");
 
-}).getVendors();
+    v.forEach(i=>{
+      let o=document.createElement("option");
+      o.value=i;
+      list.appendChild(o);
+    });
 
-
-google.script.run.withSuccessHandler(function(p){
-
-const list=document.getElementById("partList");
-
-p.forEach(i=>{
-let o=document.createElement("option");
-o.value=i;
-list.appendChild(o);
-});
-
-}).getParts();
+  }).getVendors();
 
 
-google.script.run.withSuccessHandler(function(d){
+  /* Parts */
 
-const list=document.getElementById("openDC");
+  google.script.run.withSuccessHandler(function(p){
 
-d.forEach(i=>{
-let o=document.createElement("option");
-o.value=i;
-list.appendChild(o);
-});
+    const list=document.getElementById("partList");
 
-}).getOpenDC();
+    p.forEach(i=>{
+      let o=document.createElement("option");
+      o.value=i;
+      list.appendChild(o);
+    });
+
+  }).getParts();
+
+
+  /* Open DC list */
+
+  google.script.run.withSuccessHandler(function(d){
+
+    const list=document.getElementById("openDC");
+
+    d.forEach(i=>{
+      let o=document.createElement("option");
+      o.value=i;
+      list.appendChild(o);
+    });
+
+  }).getOpenDC();
 
 }
 
-/* SAVE ENTRY */
+
+/* =========================================================
+   SAVE ENTRY
+   ========================================================= */
 
 function save(){
 
-const btn=document.getElementById("saveBtn");
-btn.disabled=true;
-btn.innerText="Saving...";
+  const btn=document.getElementById("saveBtn");
 
-if(!plant.value || !type.value || !vendor.value || !dc.value){
-msg.innerHTML="Please fill required fields";
-msg.className="msg error";
-btn.disabled=false;
-btn.innerText="Save";
-return;
+  btn.disabled=true;
+  btn.innerText="Saving...";
+
+
+  if(!plant.value || !type.value || !vendor.value || !dc.value){
+
+    msg.innerHTML="Please fill required fields";
+    msg.className="msg error";
+
+    btn.disabled=false;
+    btn.innerText="Save";
+    return;
+
+  }
+
+
+  const data={
+    plant:plant.value,
+    type:type.value,
+    vendor:vendor.value,
+    dc:dc.value,
+    part:part.value,
+    qty:qty.value,
+    dock:dock.value,
+    remark:remark.value
+  };
+
+
+  google.script.run
+  .withSuccessHandler(function(res){
+
+    btn.disabled=false;
+    btn.innerText="Save";
+
+    if(res.status){
+
+      msg.innerHTML="Saved Successfully";
+      clearForm();
+      msg.className="msg success";
+
+    }else{
+
+      msg.innerHTML=res.msg;
+      msg.className="msg error";
+
+    }
+
+  })
+  .saveEntry(data);
+
 }
 
 
-const data={
-
-plant:plant.value,
-type:type.value,
-vendor:vendor.value,
-dc:dc.value,
-part:part.value,
-qty:qty.value,
-dock:dock.value,
-remark:remark.value
-
-};
-
-google.script.run
-.withSuccessHandler(function(res){
-
-btn.disabled=false;
-btn.innerText="Save";
-
-if(res.status){
-
-msg.innerHTML="Saved Successfully";
-clearForm();
-msg.className="msg success";
-
-}
-
-else{
-
-msg.innerHTML=res.msg;
-msg.className="msg error";
-
-}
-
-})
-.saveEntry(data);
-
-}
+/* =========================================================
+   CLEAR LOG FORM
+   ========================================================= */
 
 function clearForm(){
 
-plant.value="";
-type.value="";
-vendor.value="";
-dc.value="";
-part.value="";
-qty.value="";
-dock.value="";
-remark.value="";
+  plant.value="";
+  type.value="";
+  vendor.value="";
+  dc.value="";
+  part.value="";
+  qty.value="";
+  dock.value="";
+  remark.value="";
 
 }
 
-/* CLOSE */
+
+/* =========================================================
+   CLOSE DC
+   ========================================================= */
 
 function closeEntry(){
 
-const btn=document.getElementById("closeBtn");
+  const btn=document.getElementById("closeBtn");
 
-if(!closeType.value || !closeDC.value){
-msg2.innerHTML="Select required fields";
-msg2.className="msg error";
-btn.disabled=false;
-btn.innerText="Close";
-return;
+  if(!closeType.value || !closeDC.value){
+
+    msg2.innerHTML="Select required fields";
+    msg2.className="msg error";
+
+    btn.disabled=false;
+    btn.innerText="Close";
+    return;
+
+  }
+
+  btn.disabled=true;
+  btn.innerText="Closing...";
+
+
+  const selected = closeDC.value.split(" | ");
+
+  const data={
+    type:closeType.value,
+    dc:selected[1],
+    vendor:selected[0],
+    edi:edi.value,
+    invoice:invoice.value
+  };
+
+
+  google.script.run
+  .withSuccessHandler(function(res){
+
+    btn.disabled=false;
+    btn.innerText="Close";
+
+    if(res.status){
+
+      msg2.innerHTML="Closed Successfully";
+      msg2.className="msg success";
+
+      closeType.value="";
+      closeDC.value="";
+      edi.value="";
+      invoice.value="";
+      toggleCloseFields();
+      closeDC.focus();
+
+      setTimeout(()=>{
+        msg2.innerHTML="";
+      },3000);
+
+    }else{
+
+      msg2.innerHTML=res.msg;
+      msg2.className="msg error";
+
+    }
+
+  })
+  .closeDC(data);
+
 }
 
-btn.disabled=true;
-btn.innerText="Closing...";
 
-const selected = closeDC.value.split(" | ");
-
-const data={
-
-type:closeType.value,
-dc: selected[1],
-vendor: selected[0],
-edi:edi.value,
-invoice:invoice.value
-
-};
-
-google.script.run
-.withSuccessHandler(function(res){
-
-btn.disabled=false;
-btn.innerText="Close";
-
-if(res.status){
-
-msg2.innerHTML="Closed Successfully";
-msg2.className="msg success";
-
-closeType.value="";
-closeDC.value="";
-edi.value="";
-invoice.value="";
-toggleCloseFields();
-closeDC.focus();
-setTimeout(()=>{
-msg2.innerHTML="";
-},3000);
-
-}
-
-else{
-
-msg2.innerHTML=res.msg;
-msg2.className="msg error";
-
-}
-
-})
-.closeDC(data);
-
-}
-
-
-/* CLOSE TOGGLE */
+/* =========================================================
+   TOGGLE EDI / INVOICE FIELD
+   ========================================================= */
 
 function toggleCloseFields(){
 
-const type = document.getElementById("closeType").value;
+  const type = document.getElementById("closeType").value;
 
-if(type=="Without EDI"){
+  if(type=="Without EDI"){
 
-ediField.style.display="block";
-invoiceField.style.display="none";
-
-}else{
-ediField.style.display="none";
-invoiceField.style.display="block";
-
-}
+    ediField.style.display="block";
+    invoiceField.style.display="none";
+  }else{
+    ediField.style.display="none";
+    invoiceField.style.display="block";
+  }
 
 }
+
 </script>
 
 </body>
