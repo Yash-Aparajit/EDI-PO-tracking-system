@@ -128,6 +128,7 @@ const sh = SpreadsheetApp.getActive().getSheetByName(MAIN);
 
 const rows = sh.getDataRange().getValues();
 
+let found=false;
 for(let i=1;i<rows.length;i++){
 
 if(
@@ -159,13 +160,18 @@ Session.getScriptTimeZone(),
 "dd/MM/yyyy")
 );
 
+found=true;
 break;
 
 }
 
 }
 
+if(found){
 return {status:true};
+}else{
+return {status:false,msg:"Record not found"};
+}
 
 }
 
