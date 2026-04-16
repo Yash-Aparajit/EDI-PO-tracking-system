@@ -226,7 +226,7 @@ button:disabled{
 
 
 <label>Type</label>
-<select id="type">
+<select id="type" onchange="updateIdentifierLabel()">
 <option value="">--Select--</option>
 <option>Without EDI</option>
 <option>Inward DC</option>
@@ -238,7 +238,7 @@ button:disabled{
 <datalist id="vendorList"></datalist>
 
 
-<label>DC No</label>
+<label id="identifierLabel">DC No</label>
 <input type="number" id="dc" inputmode="numeric" pattern="[0-9]*">
 
 
@@ -310,6 +310,7 @@ button:disabled{
 </div>
 
 </div>
+
 
 <script>
 
@@ -521,6 +522,7 @@ function closeEntry(){
     invoice:invoice.value
   };
 
+
   google.script.run
   .withSuccessHandler(function(res){
 
@@ -582,6 +584,7 @@ function toggleCloseFields(){
     invoiceField.style.display="block";
 
   }
+
 }
 
 </script>
