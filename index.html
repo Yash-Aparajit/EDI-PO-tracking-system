@@ -286,7 +286,7 @@ button:disabled{
 </select>
 
 
-<label>DC No</label>
+<label id="closeIdLabel">DC No</label>
 <input id="closeDC" list="openDC">
 <datalist id="openDC"></datalist>
 
@@ -310,7 +310,6 @@ button:disabled{
 </div>
 
 </div>
-
 
 <script>
 
@@ -443,7 +442,6 @@ function save(){
     qty:qty.value,
     dock:dock.value,
     remark:remark.value
-     
   };
 
 
@@ -523,13 +521,10 @@ function closeEntry(){
     invoice:invoice.value
   };
 
-
   google.script.run
-     
   .withSuccessHandler(function(res){
 
     btn.disabled=false;
-     
     btn.innerText="Close";
 
     if(res.status){
@@ -568,7 +563,13 @@ function closeEntry(){
 
 function toggleCloseFields(){
 
-  const type = document.getElementById("closeType").value;
+  const label = document.getElementById("closeIdLabel");
+
+  if(type=="Without EDI"){
+  label.innerText="Invoice No";
+  }else{
+  label.innerText="DC No";
+  }
 
   if(type=="Without EDI"){
 
@@ -581,7 +582,6 @@ function toggleCloseFields(){
     invoiceField.style.display="block";
 
   }
-
 }
 
 </script>
