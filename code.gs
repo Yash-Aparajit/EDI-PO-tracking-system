@@ -169,8 +169,8 @@ function closeDC(data) {
 
       if (
         (
-          (data.type=="Without EDI" && rows[i][5]==data.dc) ||
-          (data.type=="Inward DC" && rows[i][6]==data.dc)
+          (data.type=="Without EDI" && String(rows[i][5])==String(data.dc)) ||
+          (data.type=="Inward DC" && String(rows[i][6])==String(data.dc))
         ) &&
         (data.vendor=="" || rows[i][4]==data.vendor) &&
         rows[i][3] == data.type
