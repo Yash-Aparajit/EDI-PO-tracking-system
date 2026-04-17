@@ -516,7 +516,7 @@ function closeEntry(){
 
   const data={
     type:closeType.value,
-    dc: selected.length>1 ? selected[0] : selected[0],
+    dc: selected[0],
     vendor: selected.length>1 ? selected[1] : "",
     edi:edi.value,
     invoice:invoice.value
@@ -610,8 +610,6 @@ function toggleCloseFields(){
   }
 
 }
-
 </script>
-
 </body>
 </html>
