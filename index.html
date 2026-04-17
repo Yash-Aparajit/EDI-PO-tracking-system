@@ -560,6 +560,28 @@ function closeEntry(){
 
 
 /* =========================================================
+   SWITCH LOG DC IDENTIFIER LABEL
+   ========================================================= */
+
+function updateIdentifierLabel(){
+
+  const type = document.getElementById("type").value;
+  const label = document.getElementById("identifierLabel");
+
+  if(type=="Without EDI"){
+    label.innerText="Vendor Invoice No";
+  }else if(type=="Inward DC"){
+    label.innerText="DC No";
+  }else{
+    label.innerText="DC No";
+  }
+
+  document.getElementById("dc").value="";
+
+}
+
+
+/* =========================================================
    TOGGLE EDI / INVOICE FIELD
    ========================================================= */
 
