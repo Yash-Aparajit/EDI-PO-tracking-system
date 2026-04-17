@@ -587,7 +587,9 @@ function updateIdentifierLabel(){
 
 function toggleCloseFields(){
 
+  const type = document.getElementById("closeType").value;
   const label = document.getElementById("closeIdLabel");
+  document.getElementById("closeDC").value="";
 
   if(type=="Without EDI"){
   label.innerText="Invoice No";
