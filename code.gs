@@ -129,12 +129,12 @@ function getOpenDC() {
 
   for (let i = 1; i < data.length; i++) {
 
-    if (data[i][11] == "Pending") {
+    if (data[i][12] == "Pending") {
 
-      if(data[i][3]=="Without EDI"){
-      arr.push(data[i][5] + " | " + data[i][4]);   // Vendor Invoice
-      }else{
-      arr.push(data[i][6] + " | " + data[i][4]);   // DC No
+      if (data[i][3] == "Without EDI") {
+        arr.push(data[i][5] + " | " + data[i][4]);   // Vendor Invoice
+      } else {
+        arr.push(data[i][6] + " | " + data[i][4]);   // DC No
       }
 
     }
@@ -142,7 +142,6 @@ function getOpenDC() {
   }
 
   return arr;
-
 }
 
 
@@ -236,4 +235,3 @@ function closeDC(data) {
   }
 
 }
-
