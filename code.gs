@@ -83,17 +83,17 @@ function saveEntry(data) {
       data.plant,
       data.type,
       data.vendor,
-      data.type=="Without EDI" ? data.dc : "",   // Vendor Invoice No (F)
-      data.type=="Inward DC" ? data.dc : "",     // DC No (G)
-      "",                                        // EDI No (H)
-      "",                                        // Customer Invoice No (I)
+      data.type=="Without EDI" ? data.dc : "",   
+      data.type=="Inward DC" ? data.dc : "",     
+      "",                                        
+      "",                                        
       data.part,
       data.qty,
       data.dock,
       "Pending",
-      "",             // Closed On
+      "",             
       data.remark,
-      ""              // Time Taken
+      ""              
     ]);
 
     return { status: true };
@@ -226,10 +226,8 @@ function closeDC(data) {
   catch (err) {
 
     return { status: false, msg: err.message };
-
   }
   finally {
-
     lock.releaseLock();
 
   }
