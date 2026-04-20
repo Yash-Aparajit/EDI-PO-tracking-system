@@ -287,8 +287,9 @@ button:disabled{
 
 
 <label id="closeIdLabel">DC No</label>
-<input id="closeDC" list="openDC">
-<datalist id="openDC"></datalist>
+<select id="closeDC">
+<option value="">--Select--</option>
+</select>
 
 
 <div id="ediField">
@@ -342,12 +343,13 @@ function switchTab(tab){
 
     google.script.run.withSuccessHandler(function(d){
 
-    const list=document.getElementById("openDC");
-    list.innerHTML="";
+    const list=document.getElementById("closeDC");
+    list.innerHTML='<option value="">--Select--</option>';
 
     d.forEach(i=>{
     let o=document.createElement("option");
     o.value=i;
+    o.text=i;
     list.appendChild(o);
     });
 
@@ -397,12 +399,14 @@ window.onload=function(){
 
   google.script.run.withSuccessHandler(function(d){
 
-    const list=document.getElementById("openDC");
+    const list=document.getElementById("closeDC");
+    list.innerHTML='<option value="">--Select--</option>';
 
     d.forEach(i=>{
-      let o=document.createElement("option");
-      o.value=i;
-      list.appendChild(o);
+    let o=document.createElement("option");
+    o.value=i;
+    o.text=i;
+    list.appendChild(o);
     });
 
   }).getOpenDC();
@@ -610,6 +614,8 @@ function toggleCloseFields(){
   }
 
 }
+
 </script>
+
 </body>
 </html>
