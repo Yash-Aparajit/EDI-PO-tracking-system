@@ -187,7 +187,7 @@ function closeDC(data) {
 
         /* Mark as completed */
 
-        sh.getRange(i + 1, 12).setValue("Completed");
+        sh.getRange(i + 1, 13).setValue("Completed");
 
         /* Calculate aging duration */
 
@@ -196,11 +196,11 @@ function closeDC(data) {
 
         const diff = (end - new Date(start)) / (1000 * 60 * 60 * 24);
 
-        sh.getRange(i + 1, 15).setValue(diff);
+        sh.getRange(i + 1, 16).setValue(diff);
 
         /* Set closed date */
 
-        sh.getRange(i + 1, 13).setValue(
+        sh.getRange(i + 1, 14).setValue(
           Utilities.formatDate(
             new Date(),
             Session.getScriptTimeZone(),
