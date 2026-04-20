@@ -516,7 +516,7 @@ function closeEntry(){
   btn.innerText="Closing...";
 
 
-  const selected = closeDC.value.split(" | ");
+  const selected = closeDC.value.split("|").map(s => s.trim());
 
   const data={
     type:closeType.value,
